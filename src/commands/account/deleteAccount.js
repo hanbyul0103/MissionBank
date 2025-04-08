@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const userAccountManager = require("../../handlers/userAccountManager");
+const core = require("../../handlers/Core");
 
 
 module.exports = {
@@ -9,11 +9,11 @@ module.exports = {
     async execute(interaction) {
         const accountId = interaction.user.id;
 
-        const accountResult = await userAccountManager.getAccount(accountId);
+        const accountResult = await core.getAccount(accountId);
         let deleteResult;
 
         if (accountResult.success === true) {
-            deleteResult = await userAccountManager.deleteAccount(accountId);
+            deleteResult = await core.deleteAccount(accountId);
         }
         else {
             console.log("deleteAccount failed", accountResult.message);

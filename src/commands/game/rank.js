@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const userAccountManager = require("../../handlers/userAccountManager");
+const userAccountManager = require("../../handlers/Core");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,7 +17,7 @@ module.exports = {
     async execute(interaction) {
         const range = interaction.options.getString("범위");
 
-        const data = await userAccountManager.readAccountData();
+        const data = await core.readAccountData();
 
         let sortedAccounts = Object.entries(data).sort(([, a], [, b]) => b.points - a.points);
 

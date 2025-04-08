@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const pointManager = require("../../handlers/pointManager");
-const userAccountManager = require("../../handlers/userAccountManager");
+const core = require("../../handlers/Core");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +9,7 @@ module.exports = {
         const accountId = interaction.user.id;
         const dailyPoint = Math.floor(Math.random() * 3) + 3;
 
-        const getAccountResult = await userAccountManager.getAccount(accountId);
+        const getAccountResult = await core.getAccount(accountId);
 
         if (getAccountResult.success === false) {
             console.log("getAccount failed", getAccountResult.message);
@@ -18,7 +17,7 @@ module.exports = {
             return;
         }
 
-        const getAttendanceResult = await userAccountManager.getAttendanceData(accountId);
+        const getAttendanceResult = await core.getAttendanceData(accountId);
 
         if (getAttendanceResult.success === false) {
             console.log("getAttendance failed", getAttendanceResult.message);
@@ -26,7 +25,7 @@ module.exports = {
             return;
         }
         else {
-            await userAccountManager.givePoint(accountId, dailyPoint);
+            await core.givePoint(accountId, dailyPoint);
             interaction.reply(getAttendanceResult.message + `\n${dailyPoint}p를 지급받았습니다.`);
         }
     }

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const userAccountManager = require("../../handlers/userAccountManager");
+const core = require("../../handlers/Core");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
         .setDescription("프로필을 확인할 수 있습니다."),
     async execute(interaction) {
         const accountId = interaction.user.id;
-        const getAccountResult = await userAccountManager.getAccount(accountId);
+        const getAccountResult = await core.getAccount(accountId);
 
         const profileEmbed = new EmbedBuilder()
             .setAuthor({

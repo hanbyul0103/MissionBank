@@ -1,7 +1,6 @@
 const { DateTime } = require("luxon");
 const config = require("../../config.json");
 const mysql = require("mysql2/promise");
-const { messageLink } = require("discord.js");
 
 let connection
 

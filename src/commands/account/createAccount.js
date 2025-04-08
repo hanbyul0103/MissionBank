@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { DateTime } = require("luxon");
-const userAccountManager = require("../../handlers/userAccountManager");
+const core = require("../../handlers/Core");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -17,8 +17,8 @@ module.exports = {
         const nickname = interaction.options.getString("별명");
         const accountJoinDate = DateTime.now().setZone("Asia/Seoul").toFormat("yyyy-MM-dd HH:mm:ss");
 
-        const createResult = await userAccountManager.createAccount(accountId, nickname, accountJoinDate);
-        const accountReseult = await userAccountManager.getAccount(accountId);
+        const createResult = await core.createAccount(accountId, nickname, accountJoinDate);
+        const accountReseult = await core.getAccount(accountId);
         let userData;
 
         if (accountReseult.success === true)

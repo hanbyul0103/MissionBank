@@ -1,6 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const jsonController = require("../../handlers/jsonController");
-const bankDataPath = "./data/bankData.json";
 
 module.exports = {
     data: new SlashCommandBuilder()

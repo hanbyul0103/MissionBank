@@ -1,6 +1,4 @@
 const { SlashCommandBuilder } = require("discord.js");
-const jsonController = require("../../handlers/jsonController");
-const serverDataPath = "./data/serverData.json";
 const challengeManager = require("../../handlers/challengeManager");
 
 module.exports = {
