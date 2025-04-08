@@ -168,4 +168,34 @@ async function givePoint(clientId, amount) {
     }
 }
 
-module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, givePoint };
+// 포인트 차감
+async function takePoint(clientId, amount) {
+    try {
+        const [getResults] = await connection.query(
+            "SELECT point FROM userTable WHERE id = ?",
+            [clientId]
+        );
+
+        if (getResults.length === 0) {
+            console.log("takePoint failed");
+            return { success: false, message: "게정 조회에 실패했습니다." };
+        }
+
+        const originalPoint = getResults[0];
+
+        const [results] = await connection.query(
+            "UPDATE userTable SET point = ? WHERE id = ?",
+            [Math.max(originalPoint.point - amount, 0), clientId]
+        );
+
+        if (results.affectedRows > 0) {
+            return { success: true, message: "성공" }
+        } else {
+            return { success: false, message: "실패" };
+        }
+    } catch (err) {
+        console.log("takePoint failed", err);
+    }
+}
+
+module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, givePoint, takePoint };
