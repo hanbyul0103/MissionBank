@@ -147,7 +147,7 @@ async function givePoint(clientId, amount) {
 
         if (getResults.length === 0) {
             console.log("givePoint failed");
-            return { success: false, message: "게정 조회에 실패했습니다." };
+            return { success: false, message: "계정 조회에 실패했습니다." };
         }
 
         const originalPoint = getResults[0];
@@ -177,7 +177,7 @@ async function takePoint(clientId, amount) {
 
         if (getResults.length === 0) {
             console.log("takePoint failed");
-            return { success: false, message: "게정 조회에 실패했습니다." };
+            return { success: false, message: "계정 조회에 실패했습니다." };
         }
 
         const originalPoint = getResults[0];
