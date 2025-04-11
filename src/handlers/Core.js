@@ -144,10 +144,10 @@ async function getBankData() {
             "SELECT * FROM bank",
         );
 
-        if (bank.length === 0) {
+        if (bankResult.length === 0) {
             return { success: false, message: "은행 데이터 로드에 실패했습니다." };
         } else {
-            return { success: true, message: "은행 데이터 로드 성공!", data: bankResult };
+            return { success: true, message: "은행 데이터 로드 성공!", data: bankResult[0] };
         }
     } catch (err) {
         console.error("getBankData", err);

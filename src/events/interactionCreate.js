@@ -1,5 +1,3 @@
-const userAccountManager = require("../handlers/userAccountManager");
-
 module.exports = {
     name: "interactionCreate",
     async execute(interaction, client) {

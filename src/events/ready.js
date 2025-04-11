@@ -2,8 +2,6 @@ const cron = require("node-cron");
 const jsonController = require("../handlers/jsonController");
 const serverDataPath = "./data/serverData.json";
 const challengeManager = require("../handlers/challengeManager");
-const userAccountManager = require("../handlers/userAccountManager");
-
 
 module.exports = {
     name: "ready",
@@ -41,19 +39,6 @@ module.exports = {
                     }
                 }
             }
-        });
-
-        // attendanceCheck scheduler
-        cron.schedule("0 0 * * *", async () => {
-            const data = await userAccountManager.readAccountData();
-
-            Object.keys(data).forEach(async (clientId) => {
-                if (data[clientId].hasOwnProperty("dailyCheck")) {
-                    data[clientId].dailyCheck = false;
-                }
-
-                await userAccountManager.writeAccountData(clientId, data[clientId]);
-            });
         });
     }
 };
