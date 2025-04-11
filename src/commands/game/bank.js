@@ -5,7 +5,7 @@ module.exports = {
         .setName("은행")
         .setDescription("은행에 쌓인 포인트를 확인할 수 있습니다."),
     async execute(interaction) {
-        const data = await jsonController.readData(bankDataPath);
+        
 
         const profileEmbed = new EmbedBuilder()
             .setAuthor({

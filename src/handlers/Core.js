@@ -137,6 +137,24 @@ async function getAttendanceData(clientId) {
     }
 }
 
+// 은행 데이터 가져오기
+async function getBankData() {
+    try {
+        const [bankResult] = await connection.query(
+            "SELECT * FROM bank",
+        );
+
+        if (bank.length === 0) {
+            return { success: false, message: "은행 데이터 로드에 실패했습니다." };
+        } else {
+            return { success: true, message: "은행 데이터 로드 성공!", data: bankResult };
+        }
+    } catch (err) {
+        console.error("getBankData", err);
+        return { success: false, message: "은행 데이터 로드에 실패했습니다." };
+    }
+}
+
 // 포인트 지급
 async function givePoint(clientId, amount) {
     try {
@@ -158,7 +176,7 @@ async function givePoint(clientId, amount) {
         );
 
         if (results.affectedRows > 0) {
-            return { success: true, message: "성공" }
+            return { success: true, message: "성공" };
         } else {
             return { success: false, message: "실패" };
         }
@@ -188,7 +206,7 @@ async function takePoint(clientId, amount) {
         );
 
         if (results.affectedRows > 0) {
-            return { success: true, message: "성공" }
+            return { success: true, message: "성공" };
         } else {
             return { success: false, message: "실패" };
         }
@@ -197,4 +215,4 @@ async function takePoint(clientId, amount) {
     }
 }
 
-module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, givePoint, takePoint };
+module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, getBankData, givePoint, takePoint };
