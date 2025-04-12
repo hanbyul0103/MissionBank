@@ -215,4 +215,8 @@ async function takePoint(clientId, amount) {
     }
 }
 
+async function bankPoint(params) {
+    
+}
+
 module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, getBankData, givePoint, takePoint };
