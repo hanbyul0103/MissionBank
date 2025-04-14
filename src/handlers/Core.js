@@ -52,6 +52,25 @@ async function getAccount(clientId) {
     }
 }
 
+// 모든 계정 가져오기
+async function getAllAccount() {
+    try {
+        const [results] = await connection.query(
+            "SELECT * FROM userTable ORDER BY point DESC LIMIT 5"
+        )
+
+        if (results.length === 0) {
+            return { success: false, message: "가입된 계정이 없습니다." };
+        }
+
+        console.log("getAllAccount success!", results);
+        return { success: true, message: "계정 조회 성공!", data: results };
+    } catch (err) {
+        console.error("getAllAccount failed", err);
+        return { success: false, message: "계정 조회에 실패했습니다." };
+    }
+}
+
 // 계정 삭제
 async function deleteAccount(clientId) {
     try {
@@ -215,4 +234,4 @@ async function modifyBankPoint(amount) {
     }
 }
 
-module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, getBankData, modifyPoint, modifyBankPoint };
+module.exports = { createAccount, getAccount, getAllAccount, deleteAccount, getAttendanceData, getBankData, modifyPoint, modifyBankPoint };
