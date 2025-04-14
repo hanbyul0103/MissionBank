@@ -17,7 +17,8 @@ async function createAccount(clientId, userName, currentTime) {
     try {
         await connection.query(
             "INSERT INTO userTable (id, name, point, createAt) VALUES (?, ?, ?, ?)",
-            [clientId, userName, 0, currentTime]);
+            [clientId, userName, 0, currentTime]
+        );
 
         console.log("createAccount success!");
         return { success: true, message: "계정이 성공적으로 생성되었습니다!" };
