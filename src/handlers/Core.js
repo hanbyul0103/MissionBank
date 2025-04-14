@@ -182,6 +182,7 @@ async function modifyPoint(clientId, amount) {
         }
     } catch (err) {
         console.log("modifyPoint failed", err);
+        return { success: false, message: "값 수정에 실패했습니다." };
     }
 }
 
@@ -210,6 +211,7 @@ async function modifyBankPoint(amount) {
         }
     } catch (err) {
         console.log("modifyBankPoint failed", err);
+        return { success: false, message: "값 수정에 실패했습니다." };
     }
 }
 
