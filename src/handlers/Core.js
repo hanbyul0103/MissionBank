@@ -155,8 +155,8 @@ async function getBankData() {
     }
 }
 
-// 포인트 지급
-async function givePoint(clientId, amount) {
+// 포인트 값 수정
+async function modifyPoint(clientId, amount) {
     try {
         const [getResults] = await connection.query(
             "SELECT point FROM userTable WHERE id = ?",
@@ -164,7 +164,7 @@ async function givePoint(clientId, amount) {
         );
 
         if (getResults.length === 0) {
-            console.log("givePoint failed");
+            console.log("modifyPoint failed");
             return { success: false, message: "계정 조회에 실패했습니다." };
         }
 
@@ -172,7 +172,7 @@ async function givePoint(clientId, amount) {
 
         const [results] = await connection.query(
             "UPDATE userTable SET point = ? WHERE id = ?",
-            [originalPoint.point + amount, clientId]
+            [Math.max(originalPoint.point + amount, 0), clientId]
         );
 
         if (results.affectedRows > 0) {
@@ -181,7 +181,7 @@ async function givePoint(clientId, amount) {
             return { success: false, message: "실패" };
         }
     } catch (err) {
-        console.log("givePoint failed", err);
+        console.log("modifyPoint failed", err);
     }
 }
 
@@ -219,4 +219,4 @@ async function bankPoint(params) {
     
 }
 
-module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, getBankData, givePoint, takePoint };
+module.exports = { createAccount, getAccount, deleteAccount, getAttendanceData, getBankData, modifyPoint };

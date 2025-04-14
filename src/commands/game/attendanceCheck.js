@@ -25,7 +25,7 @@ module.exports = {
             return;
         }
         else {
-            await core.givePoint(accountId, dailyPoint);
+            await core.modifyPoint(accountId, dailyPoint);
             interaction.reply(getAttendanceResult.message + `\n${dailyPoint}p를 지급받았습니다.`);
         }
     }
