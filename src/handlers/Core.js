@@ -1,21 +1,10 @@
 const { DateTime } = require("luxon");
-const config = require("../../config.json");
-const mysql = require("mysql2/promise");
-
-let connection
-
-(async function () {
-    const conn = await mysql.createConnection(config.mysql);
-    await conn.connect();
-
-    connection = conn;
-    console.log("MySQL 연결 성공!");
-})();
+const pool = require("./database");
 
 // 계정 만들기
-async function createAccount(clientId, userName, currentTime) {
+async function createAccount(clientId, userName, currentTime, pool) {
     try {
-        await connection.query(
+        await pool.query(
             "INSERT INTO userTable (id, name, point, createAt) VALUES (?, ?, ?, ?)",
             [clientId, userName, 0, currentTime]
         );
@@ -36,7 +25,7 @@ async function createAccount(clientId, userName, currentTime) {
 // 계정 가져오기
 async function getAccount(clientId) {
     try {
-        const [results] = await connection.query(
+        const [results] = await pool.query(
             "SELECT * FROM userTable WHERE id = ?",
             [clientId]
         );
@@ -56,7 +45,7 @@ async function getAccount(clientId) {
 // 모든 계정 가져오기
 async function getAllAccount() {
     try {
-        const [results] = await connection.query(
+        const [results] = await pool.query(
             "SELECT * FROM userTable ORDER BY point DESC LIMIT 5"
         )
 
@@ -74,7 +63,9 @@ async function getAllAccount() {
 
 // 계정 삭제
 async function deleteAccount(clientId) {
+    let connection;
     try {
+        connection = await pool.getConnection();
         const [results] = await connection.query(
             "DELETE FROM userTable WHERE id = ?",
             [clientId]
@@ -108,11 +99,16 @@ async function deleteAccount(clientId) {
         console.error("deleteAccount failed", err);
         return { success: false, message: "최종 계정 삭제에 실패했습니다." };
     }
+    finally {
+        connection?.release();
+    }
 }
 
 // 출석체크
 async function getAttendanceData(clientId) {
+    let connection;
     try {
+        connection = await pool.getConnection();
         const now = DateTime.now().setZone("Asia/Seoul");
         const today = now.toFormat("yyyy-MM-dd");
 
@@ -155,12 +151,15 @@ async function getAttendanceData(clientId) {
         console.error("attendanceCheck failed", err);
         return { success: false, message: "출석체크에 실패했습니다." };
     }
+    finally {
+        connection?.release();
+    }
 }
 
 // 은행 데이터 가져오기
 async function getBankData() {
     try {
-        const [bankResult] = await connection.query(
+        const [bankResult] = await pool.query(
             "SELECT * FROM bank",
         );
 
@@ -177,7 +176,9 @@ async function getBankData() {
 
 // 포인트 값 수정
 async function modifyPoint(clientId, amount) {
+    let connection;
     try {
+        connection = await pool.getConnection();
         const [getResults] = await connection.query(
             "SELECT point FROM userTable WHERE id = ?",
             [clientId]
@@ -204,10 +205,15 @@ async function modifyPoint(clientId, amount) {
         console.log("modifyPoint failed", err);
         return { success: false, message: "값 수정에 실패했습니다." };
     }
+    finally {
+        connection?.release();
+    }
 }
 
 async function modifyBankPoint(amount) {
+    let connection;
     try {
+        connection = await pool.getConnection();
         const [getResults] = await connection.query(
             "SELECT point FROM bank"
         );
@@ -232,6 +238,9 @@ async function modifyBankPoint(amount) {
     } catch (err) {
         console.log("modifyBankPoint failed", err);
         return { success: false, message: "값 수정에 실패했습니다." };
+    }
+    finally {
+        connection?.release();
     }
 }
 
