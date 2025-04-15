@@ -2,7 +2,7 @@ const { DateTime } = require("luxon");
 const pool = require("./database");
 
 // 계정 만들기
-async function createAccount(clientId, userName, currentTime, pool) {
+async function createAccount(clientId, userName, currentTime) {
     try {
         await pool.query(
             "INSERT INTO userTable (id, name, point, createAt) VALUES (?, ?, ?, ?)",
