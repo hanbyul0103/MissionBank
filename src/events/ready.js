@@ -18,28 +18,8 @@ module.exports = {
         });
 
         // dailyChallenge scheduler
-        cron.schedule("25 10 * * *", async () => {
-            const serverData = await jsonController.readData(serverDataPath);
-            const serverIds = Object.keys(serverData);
-
-            for (const serverId of serverIds) {
-                const channelId = serverData[serverId].channelId;
-                const status = serverData[serverId].challengeStatus;
-                const guild = await client.guilds.fetch(serverId);
-
-                const channel = await guild.channels.fetch(channelId);
-
-                if (channel) {
-                    if (status === "true") {
-                        const challenge = await challengeManager.pickChallenge();
-                        console.log(`${challenge}`);
-                        await channel.send(`🌟 오늘의 미션: **${challenge}**`);
-                    }
-                    else {
-                        await channel.send("asdf");
-                    }
-                }
-            }
+        cron.schedule("45 00 * * *", async () => {
+            challengeManager.setMission();
         });
 
         Object.values(missionCores).forEach(v => v.init(client));

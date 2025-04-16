@@ -1,35 +1,61 @@
 const jsonController = require("./jsonController");
 const challengeDataPath = "./data/challengeData.json";
 const serverDataPath = "./data/serverData.json";
+const pool = require("./database");
+const { missionCores } = require("../handlers/base");
 
-async function pickChallenge() {
-    const challengeData = await jsonController.readData(challengeDataPath);
-
-    let randomChallenge = Math.floor(Math.random() * challengeData.challenge.length);
-
-    return challengeData.challenge[randomChallenge];
-}
-
-async function setMissionStatus(guildId, channelId, status) {
-    const serverData = await jsonController.readData(serverDataPath);
-
-    if (!serverData[guildId]) {
-        serverData[guildId] = {
-            channelId: channelId,
-            challengeStatus: status
-        };
+// 자정에 미션 선택
+async function setChallenge(serverId) {
+    const randomChallenge = Math.floor(Math.random() * missionCores.length);
+    
+    try {
+        await pool.query(
+            "UPDATE mission_servers SET mission = ? WHERE serverId = ?",
+            [missionCores[randomChallenge].id, serverId]
+        );
+    } catch (err) {
+        console.log("setChallenge failed", err);
     }
-    else {
-        serverData[guildId].channelId = channelId;
-        serverData[guildId].challengeStatus = status;
+}
+
+// 서버 설정
+async function setServer(guildId) {
+    try {
+        await pool.query(
+            "INSERT INTO mission_servers (serverId) VALUES (?)",
+            [guildId]
+        );
+
+        console.log("setServer success");
+        return { success: true, message: "성공!" };
+    } catch (err) {
+        if (err.code === "ER_DUP_ENTRY") {
+            console.log("setServer failed", err);
+            return { success: false, message: "이미 있음" };
+        } else {
+            console.log("setServer failed", err);
+            return { success: false, message: "실패함" };
+        }
     }
-
-    await jsonController.saveData(serverDataPath, serverData);
 }
 
-async function getMissionStatus(guildId) {
-    const data = await jsonController.readData(serverDataPath);
-    return data[guildId].challengeStatus || "false";
+// 미션 설정
+async function setMission() {
+    try {
+        [rows] = await pool.query(
+            "SELECT serverId FROM mission_servers"
+        );
+
+        rows.forEach(serverId => {
+            setChallenge(serverId);
+        });
+
+        console.log("setMission success");
+        return { success: true, message: "미션 설정 성공" };
+    } catch (err) {
+        console.log("setMission failed", err);
+        return { success: false, message: "미션 설정 실패" };
+    }
 }
 
-module.exports = { pickChallenge, setMissionStatus, getMissionStatus };
+module.exports = { setChallenge, setServer, setMission };
