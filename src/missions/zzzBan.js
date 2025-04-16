@@ -1,4 +1,4 @@
-const { MissionBase, registerMission } = require("./base");
+const { MissionBase, registerMission } = require("../handlers/base");
 
 class ZZZZZZBan extends MissionBase {
     constructor() {

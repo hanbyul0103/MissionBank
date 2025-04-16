@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const jsonController = require("../handlers/jsonController");
 const serverDataPath = "./data/serverData.json";
 const challengeManager = require("../handlers/challengeManager");
-const { missionCores } = require("../missions/base");
+const { missionCores } = require("../handlers/base");
 
 module.exports = {
     name: "ready",

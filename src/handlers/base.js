@@ -1,10 +1,10 @@
-const pool = require("../handlers/database");
+const pool = require("./database");
 
 const missionCores = {};
 
 class MissionBase {
     id = -1;
-    name = 'domi - untitled';
+    name = 'mission name';
     
     init(client) {
         console.log(`[mission] ${this.id} ${this.name} init!`);
@@ -23,7 +23,3 @@ const registerMission = function(instance) {
 exports.MissionBase = MissionBase;
 exports.registerMission = registerMission;
 exports.missionCores = missionCores;
-
-// module.exports = {
-//     MissionBase: MissionBase
-// }

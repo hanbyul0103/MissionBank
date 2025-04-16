@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const { loadCommands } = require('./handlers/commandHandler');
 const { loadEvents } = require('./handlers/eventHandler');
 const { spawn } = require("child_process");
-require("./missions/runner");
+const missionLoader = require("./handlers/runner");
 
 const client = new Client({
     intents: [
@@ -21,5 +21,6 @@ deployProcess.stderr.on("data", data => console.error(`[슬래시 등록 오류]
 
 loadCommands(client);
 loadEvents(client);
+missionLoader();
 
 client.login(config.token);
