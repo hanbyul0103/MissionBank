@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const { loadCommands } = require('./handlers/commandHandler');
 const { loadEvents } = require('./handlers/eventHandler');
 const { spawn } = require("child_process");
+require("./missions/runner");
 
 const client = new Client({
     intents: [

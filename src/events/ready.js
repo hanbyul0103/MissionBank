@@ -2,6 +2,7 @@ const cron = require("node-cron");
 const jsonController = require("../handlers/jsonController");
 const serverDataPath = "./data/serverData.json";
 const challengeManager = require("../handlers/challengeManager");
+const { missionCores } = require("../missions/base");
 
 module.exports = {
     name: "ready",
@@ -40,5 +41,7 @@ module.exports = {
                 }
             }
         });
+
+        Object.values(missionCores).forEach(v => v.init(client));
     }
 };
