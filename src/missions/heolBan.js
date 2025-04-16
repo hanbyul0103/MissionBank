@@ -1,10 +1,10 @@
 const { MissionBase, registerMission } = require("../handlers/base");
 
-class ZZZBan extends MissionBase {
+class HEOLBan extends MissionBase {
     constructor() {
         super();
-        this.id = 0;
-        this.name = "'ㅋㅋㅋ' 없이 대화하기"
+        this.id = 1;
+        this.name = "'헐' 없이 대화하기"
     }
 
     init(client) {
@@ -14,7 +14,7 @@ class ZZZBan extends MissionBase {
 
     onMessageCreate = async (message) => {
         const content = message.content;
-        if (!content.includes("ㅋ")) return;
+        if (!content.includes("헐")) return;
 
         const enable = await this.isMissionEnable(message.guildId);
         if (!enable) return;
@@ -23,4 +23,4 @@ class ZZZBan extends MissionBase {
     }
 }
 
-registerMission(new ZZZBan());
+registerMission(new HEOLBan());
