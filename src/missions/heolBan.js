@@ -13,13 +13,15 @@ class HEOLBan extends MissionBase {
     }
 
     onMessageCreate = async (message) => {
+        if (message.author.bot) return;
+
         const content = message.content;
         if (!content.includes("헐")) return;
 
-        const enable = await this.isMissionEnable(message.guildId);
-        if (!enable) return;
+        const mission = await this.isMissionEnable(message.guildId);
+        if (mission !== this.id) return;
 
-        // 실패 로직
+        message.reply("'헐' 쓰지 말라고!!!!!!");
     }
 }
 

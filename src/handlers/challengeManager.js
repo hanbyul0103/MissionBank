@@ -6,12 +6,12 @@ const { missionCores } = require("../handlers/base");
 
 // 자정에 미션 선택
 async function setChallenge(serverId) {
-    const randomChallenge = Math.floor(Math.random() * missionCores.length);
-    
+    const randomChallenge = Math.floor(Math.random() * Object.keys(missionCores).length);
+
     try {
         await pool.query(
             "UPDATE mission_servers SET mission = ? WHERE serverId = ?",
-            [missionCores[randomChallenge].id, serverId]
+            [missionCores[`${randomChallenge}`].id, serverId]
         );
     } catch (err) {
         console.log("setChallenge failed", err);
@@ -46,8 +46,8 @@ async function setMission() {
             "SELECT serverId FROM mission_servers"
         );
 
-        rows.forEach(serverId => {
-            setChallenge(serverId);
+        await rows.forEach(row => {
+            setChallenge(row.serverId);
         });
 
         console.log("setMission success");

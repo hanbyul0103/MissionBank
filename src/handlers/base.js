@@ -5,18 +5,23 @@ const missionCores = {};
 class MissionBase {
     id = -1;
     name = 'mission name';
-    
+
     init(client) {
         console.log(`[mission] ${this.id} ${this.name} init!`);
     }
-    
+
     async isMissionEnable(serverId) {
-        const [ [ { count } ] ] = await pool.query("SELECT COUNT(*) AS count FROM mission_servers WHERE server = ?", [ serverId ]);
-        return count > 0;
+        const [result] = await pool.query(
+            "SELECT mission FROM mission_servers WHERE serverId = ?",
+            [serverId]
+        );
+
+        console.log(result);
+        return result;
     }
 }
 
-const registerMission = function(instance) {
+const registerMission = function (instance) {
     missionCores[instance.id] = instance;
 }
 

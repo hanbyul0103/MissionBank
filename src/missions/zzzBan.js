@@ -13,11 +13,13 @@ class ZZZBan extends MissionBase {
     }
 
     onMessageCreate = async (message) => {
+        if (message.author.bot) return;
+
         const content = message.content;
         if (!content.includes("ㅋ")) return;
 
-        const enable = await this.isMissionEnable(message.guildId);
-        if (!enable) return;
+        const mission = await this.isMissionEnable(message.guildId);
+        if (mission !== this.id) return;
 
         message.reply("'ㅋ' 쓰지 말라고!!!!!!");
     }
