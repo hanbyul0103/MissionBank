@@ -19,7 +19,7 @@ class ZZZBan extends MissionBase {
         const enable = await this.isMissionEnable(message.guildId);
         if (!enable) return;
 
-        // 실패 로직
+        message.reply("'ㅋ' 쓰지 말라고!!!!!!");
     }
 }
 
