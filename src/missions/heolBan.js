@@ -19,7 +19,8 @@ class HEOLBan extends MissionBase {
         if (!content.includes("헐")) return;
 
         const mission = await this.isMissionEnable(message.guildId);
-        if (mission !== this.id) return;
+        console.log(mission.data !== this.id);
+        if (mission.data !== this.id) return;
 
         message.reply("'헐' 쓰지 말라고!!!!!!");
     }

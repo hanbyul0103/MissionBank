@@ -16,8 +16,7 @@ class MissionBase {
             [serverId]
         );
 
-        console.log(result);
-        return result;
+        return { data: Object.keys(result)[0] }
     }
 }
 
