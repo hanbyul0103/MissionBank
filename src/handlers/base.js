@@ -20,10 +20,15 @@ class MissionBase {
     }
 }
 
+class WordMission extends MissionBase {
+    keyword = 'keyword';
+    isInclude = true;
+}
+
 const registerMission = function (instance) {
     missionCores[instance.id] = instance;
 }
 
-exports.MissionBase = MissionBase;
+exports.WordMission = WordMission;
 exports.registerMission = registerMission;
 exports.missionCores = missionCores;
