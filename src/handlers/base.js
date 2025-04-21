@@ -29,6 +29,7 @@ class WordMission extends MissionBase {
         client.on('messageCreate', this.onMessageCreate);
     }
 
+    // 채팅에 keyword가 있는지 확인
     onMessageCreate = async (message) => {
         if (message.author.bot) return;
 
