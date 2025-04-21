@@ -11,18 +11,18 @@ class MissionBase {
     }
 
     async isMissionEnable(serverId) {
-        const [result] = await pool.query(
+        const [[result]] = await pool.query(
             "SELECT mission FROM mission_servers WHERE serverId = ?",
             [serverId]
         );
 
-        return { data: Object.keys(result)[0] }
+        return { data: result.mission }
     }
 }
 
 class WordMission extends MissionBase {
     keyword = 'keyword';
-    isInclude = true;
+    isRequired = true;
 
     init(client) {
         super.init(client);
@@ -33,13 +33,19 @@ class WordMission extends MissionBase {
         if (message.author.bot) return;
 
         const content = message.content;
-        if (content.includes(this.keyword) === this.isInclude) return;
 
-        const mission = await this.isMissionEnable(message.guildId);
-        if (mission.data != this.id) return;
+        if (content.includes(this.keyword) === this.isRequired) {
+            const mission = await this.isMissionEnable(message.guildId);
 
-        let use = this.isInclude ? "쓰라고!!!!!!!" : "쓰지 말라고!!!!!!!!";
-        message.reply(`${this.keyword} ${use}`);
+            if (mission.data == this.id) {
+                console.log(`this mission id is ${this.id}`);
+                console.log(`this server mission id is ${mission.data}`);
+                let use = this.isRequired ? "쓰지 말라고!!!!!!!!" : "쓰라고!!!!!!!";
+
+                console.log(`missionData: ${mission.data}`);
+                message.reply(`'${this.keyword}' ${use}`);
+            }
+        }
     }
 }
 

@@ -6,7 +6,7 @@ class HEOLBan extends WordMission {
         this.id = 1;
         this.name = "'헐' 없이 대화하기";
         this.keyword = "헐";
-        this.isInclude = false;
+        this.isRequired = false;
     }
 }
 

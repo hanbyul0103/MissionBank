@@ -18,7 +18,7 @@ module.exports = {
         });
 
         // dailyChallenge scheduler
-        cron.schedule("51 23 * * *", async () => {
+        cron.schedule("44 9 * * *", async () => {
             challengeManager.setMission();
         });
 
