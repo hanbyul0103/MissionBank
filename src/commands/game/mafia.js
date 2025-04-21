@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType } = require("discord.js");
-const { assignRoles } = require("../../Mafia/mafiaRule");
-const { Player } = require("../../Mafia/mafiaRoles");
+const { startGame, isUserInAnyGame, addUserToGame, cancelGame } = require("../../Mafia/mafiaGameManager");
 const mafiaSetting = require("../../Mafia/mafiaSetting.json");
 
 module.exports = {
@@ -39,22 +38,33 @@ module.exports = {
                 return i.reply({ content: '이미 참가하셨습니다!', ephemeral: true });
             }
 
+            if (isUserInAnyGame(i.user.id)) {
+                return i.reply({ content: '이미 다른 게임에 참가 중입니다!', ephemeral: true });
+            }
+
             if (participants.size >= mafiaSetting.maxPlayer) {
                 return i.reply({ content: '최대 인원에 도달했습니다!', ephemeral: true });
             }
 
             participants.add(i.user);
+            addUserToGame(i.user.id, interaction.guild.id);
+
             await i.reply({ content: `${i.user.username}님이 참가했습니다!`, ephemeral: true });
         });
 
         collector.on('end', async () => {
             if (participants.size < mafiaSetting.minPlayer) {
+                for (const user of participants) {
+                    addUserToGame(user.id, interaction.guild.id);
+                }
+
                 await interaction.editReply({
                     content: '❌ 1분 내에 충분한 인원이 모이지 않아 게임이 취소되었습니다.',
                     components: [],
                     embeds: [],
                 });
 
+                cancelGame(interaction.guild.id);
                 return;
             }
 
@@ -64,12 +74,11 @@ module.exports = {
                 embeds: [],
             });
 
-            const playerList = [...participants].map(user => new Player(user));
-            assignRoles(playerList);
+            const gameId = startGame(interaction, [...participants]);
 
-            for (const player of playerList) {
+            for (const player of [...participants]) {
                 await player.sendDM(`당신의 역할은 **${player.role.name}** 입니다.`);
             }
         });
     }
-}
+};
