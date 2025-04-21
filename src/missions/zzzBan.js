@@ -4,7 +4,7 @@ class ZZZBan extends WordMission {
     constructor() {
         super();
         this.id = 0;
-        this.name = "'ㅋㅋㅋ' 없이 대화하기";
+        this.name = "'ㅋ' 없이 대화하기";
         this.keyword = "ㅋ";
         this.isRequired = false;
     }

@@ -34,15 +34,12 @@ class WordMission extends MissionBase {
 
         const content = message.content;
 
-        if (content.includes(this.keyword) === this.isRequired) {
+        if (content.includes(this.keyword) !== this.isRequired) {
             const mission = await this.isMissionEnable(message.guildId);
 
             if (mission.data == this.id) {
-                console.log(`this mission id is ${this.id}`);
-                console.log(`this server mission id is ${mission.data}`);
-                let use = this.isRequired ? "쓰지 말라고!!!!!!!!" : "쓰라고!!!!!!!";
+                let use = this.isRequired ? "쓰라고!!!!!!!" : "쓰지 말라고!!!!!!!!";
 
-                console.log(`missionData: ${mission.data}`);
                 message.reply(`'${this.keyword}' ${use}`);
             }
         }
