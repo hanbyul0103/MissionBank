@@ -85,3 +85,4 @@ exports.Mafia = Mafia;
 exports.Citizen = Citizen;
 exports.Police = Police;
 exports.Doctor = Doctor;
+exports.Player = Player;
