@@ -1,13 +1,20 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType } = require("discord.js");
-const { startGame, isUserInAnyGame, addUserToGame, cancelGame } = require("../../Mafia/mafiaGameManager");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType, roleMention } = require("discord.js");
+const { MafiaGameManager } = require("../../Mafia/mafiaGameManager");
 const mafiaSetting = require("../../Mafia/mafiaSetting.json");
+const { nanoid } = require("nanoid");
+
+const gameManager = new MafiaGameManager;
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("마피아")
         .setDescription("마피아 게임을 시작합니다."),
     async execute(interaction) {
-        const participants = new Set();
+        const roomId = nanoid();
+        const room = gameManager.createRoom(roomId);
+        gameManager.addPlayerToRoom(interaction, room);
+
+        console.log(`[Mafia] Room-${gameManager.allRooms} was created.\nroomId: ${roomId}`);
 
         const embed = new EmbedBuilder()
             .setTitle("마피아 게임 참가자 모집")
@@ -34,6 +41,8 @@ module.exports = {
         });
 
         collector.on('collect', async i => {
+            const result = gameManager.addPlayerToRoom(i, room);
+
             if (participants.has(i.user)) {
                 return i.reply({ content: '이미 참가하셨습니다!', ephemeral: true });
             }
@@ -75,10 +84,6 @@ module.exports = {
             });
 
             const gameId = startGame(interaction, [...participants]);
-
-            for (const player of [...participants]) {
-                await player.sendDM(`당신의 역할은 **${player.role.name}** 입니다.`);
-            }
         });
     }
 };
