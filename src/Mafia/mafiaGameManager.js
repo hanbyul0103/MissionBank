@@ -58,9 +58,7 @@ class MafiaGameManager {
     }
 
     addPlayerToRoom(user, room) {
-        if (this.isUserInGame(user.id)) return { message: "이미 참가하셨습니다.", success: false };
-
-        const room = this.getRoom(room);
+        const room = this.getRoom(room.id);
         if (!room) return { message: "방을 찾을 수 없습니다.", success: false };
 
         const added = room.addPlayer(user);
@@ -69,7 +67,7 @@ class MafiaGameManager {
             this.allPlayers += 1;
         }
 
-        return added;
+        return true;
     }
 
     removePlayerFromRoom(user) {
