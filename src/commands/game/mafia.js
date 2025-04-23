@@ -37,7 +37,7 @@ module.exports = {
 
         const collector = message.createMessageComponentCollector({
             componentType: ComponentType.Button,
-            time: 60_000, // 1분
+            time: 60_000,
         });
 
         collector.on('collect', async i => {
@@ -66,7 +66,7 @@ module.exports = {
                     embeds: [],
                 });
 
-                cancelGame(interaction.guild.id);
+                gameManager.cancelGame(room);
                 return;
             }
 

@@ -133,8 +133,20 @@ class Room {
         this.status = gameState.go;
     }
 
+    cancelGame(room) {
+        const playerList = [...this.players.values()];
+
+        for (const player of playerList) {
+            room.removePlayer(player);
+        }
+
+        this.status = gameState.end;
+    }
+
     endGame() {
         this.status = gameState.end;
+
+        // 종료 로직
     }
 }
 
