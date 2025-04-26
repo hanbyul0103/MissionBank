@@ -143,10 +143,10 @@ class Room {
         this.status = gameState.end;
     }
 
-    endGame() {
-        this.status = gameState.end;
+    endGame(room) {
+        this.cancelGame(room);
 
-        // 종료 로직
+        // 보상
     }
 }
 
