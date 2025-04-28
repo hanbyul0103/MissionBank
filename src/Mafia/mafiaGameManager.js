@@ -144,9 +144,17 @@ class Room {
     }
 
     endGame(room) {
-        this.cancelGame(room);
+        const playerList = [...this.players.values()];
 
-        // 보상
+        for (const player of playerList) {
+            room.removePlayer(player);
+            
+            if(player.role.name)
+            console.log(this.players);
+        }
+
+
+        this.status = gameState.end;
     }
 }
 
