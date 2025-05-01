@@ -1,7 +1,6 @@
-const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType, roleMention } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder, ComponentType } = require("discord.js");
 const { MafiaGameManager } = require("../../Mafia/mafiaGameManager");
 const mafiaSetting = require("../../Mafia/mafiaSetting.json");
-const { nanoid } = require("nanoid");
 
 const gameManager = new MafiaGameManager;
 
@@ -10,6 +9,7 @@ module.exports = {
         .setName("마피아")
         .setDescription("마피아 게임을 시작합니다."),
     async execute(interaction) {
+        const { nanoid } = await import("nanoid");
         const roomId = nanoid();
         const room = gameManager.createRoom(roomId);
         gameManager.addPlayerToRoom(interaction, room);
@@ -45,7 +45,7 @@ module.exports = {
                 return i.reply({ content: '이미 다른 게임에 참가 중입니다!', ephemeral: true });
             }
 
-            if (room.players.size() >= mafiaSetting.maxPlayer) {
+            if (room.players.size >= mafiaSetting.maxPlayer) {
                 return i.reply({ content: '최대 인원에 도달했습니다!', ephemeral: true });
             }
 
@@ -59,19 +59,19 @@ module.exports = {
         });
 
         collector.on('end', async () => {
-            if (room.players.size() < mafiaSetting.minPlayer) {
+            if (room.players.size < mafiaSetting.minPlayer) {
                 await interaction.editReply({
                     content: '1분 내에 충분한 인원이 모이지 않아 게임이 취소되었습니다.',
                     components: [],
                     embeds: [],
                 });
 
-                gameManager.cancelGame(room);
+                gameManager.getRoom(roomId).cancelGame();
                 return;
             }
 
             await interaction.editReply({
-                content: `✅ ${room.players.size()}명 참가 완료! 게임을 시작합니다.`,
+                content: `✅ ${room.players.size}명 참가 완료! 게임을 시작합니다.`,
                 components: [],
                 embeds: [],
             });

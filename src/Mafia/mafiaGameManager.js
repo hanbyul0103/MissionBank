@@ -1,5 +1,4 @@
 const { Player, Mafia, Citizen, Police, Doctor } = require("./mafiaRoles");
-const { assignRoles } = require("./mafiaRule");
 
 const gameState = {
     wait: "waiting",
@@ -38,15 +37,15 @@ class MafiaGameManager {
     }
 
     deleteRoom(id) {
-        const room = this.getRoom(id);
+        const targetRoom = this.getRoom(id);
 
-        if (room) {
-            for (const userId of room.players.keys()) {
+        if (targetRoom) {
+            for (const userId of targetRoom.players.keys()) {
                 this.users.delete(userId);
             }
         }
 
-        this.rooms.delete(room);
+        this.rooms.delete(targetRoom);
     }
 
     getRoom(id) {
@@ -58,12 +57,12 @@ class MafiaGameManager {
     }
 
     addPlayerToRoom(user, room) {
-        const room = this.getRoom(room.id);
-        if (!room) return { message: "방을 찾을 수 없습니다.", success: false };
+        const targetRoom = this.getRoom(room.id);
+        if (!targetRoom) return { message: "방을 찾을 수 없습니다.", success: false };
 
-        const added = room.addPlayer(user);
+        const added = targetRoom.addPlayer(user);
         if (added) {
-            this.users.set(user.id, room);
+            this.users.set(user.id, targetRoom);
             this.allPlayers += 1;
         }
 
@@ -103,7 +102,7 @@ class Room {
     }
 
     removePlayer(user) {
-        if (!this.players.has(user.id)) return false; // 없어요
+        if (!this.players.has(user.id)) return false;
 
         this.players.delete(user.id);
 
@@ -133,26 +132,25 @@ class Room {
         this.status = gameState.go;
     }
 
-    cancelGame(room) {
+    cancelGame() {
         const playerList = [...this.players.values()];
 
         for (const player of playerList) {
-            room.removePlayer(player);
+            this.removePlayer(player);
         }
 
         this.status = gameState.end;
     }
 
-    endGame(room) {
+    endGame() {
         const playerList = [...this.players.values()];
 
         for (const player of playerList) {
-            room.removePlayer(player);
+            this.removePlayer(player);
             
             if(player.role.name)
             console.log(this.players);
         }
-
 
         this.status = gameState.end;
     }

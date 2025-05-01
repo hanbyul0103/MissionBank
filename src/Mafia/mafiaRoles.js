@@ -49,7 +49,7 @@ class Doctor extends Role {
 class Player {
     constructor(user) {
         this.id = user.id;
-        this.userName = user.user.username;
+        this.userName = user.username;
         this.member = user;
         this.role = null;
         this.isAlive = true;
